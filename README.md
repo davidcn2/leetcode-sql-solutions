@@ -44,6 +44,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 
 - `175. Combine Two Tables`
 - `176. Second Highest Salary`
+- `177. Nth Highest Salary` > Includes two solutions, pros and cons, and a final recommendation.
 - `181. Employees Earning More Than Their Managers`
 - `182. Duplicate Emails`
 
