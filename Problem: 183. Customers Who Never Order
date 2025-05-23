@@ -1,0 +1,100 @@
+# Problem: 183. Customers Who Never Order
+
+## Intuition  
+The goal involves identifying customers who have never placed any orders.
+The problem reflects a classic anti-join scenario requiring finding records in the Customers table lacking a matching record in the Orders table.
+
+## Approach #1: Use a combination of an outer join and NULL filter.
+
+1. **Select from the `Customers` table and apply a `LEFT JOIN` to the `Orders` table using `c.id = o.customerId`.**  
+   ✅ The `LEFT JOIN` includes all rows from `Customers`, attaching matching rows from `Orders` when available.
+
+2. **Use a `WHERE` clause to filter on `o.id IS NULL`.**  
+   ✅ The `NULL` in `o.id` confirms that no corresponding order exists for the customer in the joined result.
+
+3. **Select the `name` column and alias the result as `Customers`.**  
+   ✅ The `SELECT` clause focuses output on the relevant column and renames it to match the expected output.
+
+### Complexity  
+- **Time complexity**: `O(n)` for scanning and joining the two tables assuming appropriate indexing on `customerId`.
+- **Space complexity**: `O(1)` because no intermediate materialization or additional structures are required.
+
+### Code  
+```sql
+Select
+  c.name as Customers
+From
+  Customers c
+    Left Join Orders o On
+      c.id = o.customerId
+Where
+  o.id is null;
+```
+
+## Approach #2: Use `NOT EXISTS` with correlated subquery.
+
+1. **Select names from the `Customers` table using a correlated subquery inside a `NOT EXISTS` clause.**  
+   ✅ The subquery checks for the presence of an order by matching `customerId` with the `Customers` table’s `id`.
+
+2. **Apply the condition using `WHERE NOT EXISTS`.**  
+   ✅ The filter removes every row where a matching order entry exists.
+
+3. **Return the `name` field and alias the result as `Customers`.**  
+   ✅ The result includes only names with no related record in the `Orders` table. The result also uses the column name required by the problem.
+
+### Complexity  
+- **Time complexity**: `O(n)` when indexes exist on `Orders.customerId`.
+- **Space complexity**: `O(1)` with no intermediate joins or data duplication.
+
+### Code  
+```sql
+Select
+  name as Customers
+From
+  Customers c
+Where
+  Not Exists
+    (
+    Select
+      1
+    From
+      Orders o
+    Where
+      o.customerId = c.id
+    );
+```
+
+## Comparison: Pros and Cons
+
+### Method: **OUTER JOIN + NULL FILTER.**
+
+#### Pros
+
+1. Reads clearly and mirrors common reporting patterns.  
+2. Supports extension to include joined fields from related tables.  
+3. Demonstrates the structure of unmatched data using explicit join logic.  
+
+#### Cons
+
+1. Scans the entire outer table and generates temporary results.  
+2. Performs slower when join key indexes do not exist or when row volume grows.  
+3. Filters based on `NULL`, which introduces edge cases in logic comprehension.  
+
+### Method: **NOT EXISTS**
+
+#### Pros
+
+1. Executes quickly using index lookups on correlated fields.  
+2. Eliminates rows early through logical short-circuiting.  
+3. Avoids join materialization, reducing memory and I/O footprint.  
+
+#### Cons
+
+1. Requires understanding of correlated subquery execution flow.  
+2. Uses nested `SELECT` blocks, which may confuse less experienced developers.  
+3. Appears abstract in static query builders or visual tools.  
+
+## Recommendation
+
+- Use the `LEFT JOIN` + `NULL` filter method when producing human-readable output, building layered views, or aligning with outer join semantics in BI workflows.  
+- Use the `NOT EXISTS` method when optimizing for speed and index leverage, especially when working with large datasets or OLTP-aligned workloads.
