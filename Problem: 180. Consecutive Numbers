@@ -18,8 +18,11 @@ Find all numbers that appear at least three times consecutively.
 
 Return the result table in any order.
 
-## Intuition  
-The task involes identifying any number appearing **at least three times in a row** (consecutively by `id`) in the `Logs` table. Because `id` represents an auto-incrementing primary key, the column can be used to order rows deterministically.
+## Approach #1: Use a combination of a CTE and windowed function (e.g., LEAD).
+
+### Intuition  
+The task involes identifying any number appearing **at least three times in a row** (consecutively by `id`) in the `Logs` table.
+Because `id` represents an auto-incrementing primary key, the column can be used to order rows deterministically.
 
 The pattern involves checking:
 - A value `num` at row `i`
@@ -30,7 +33,7 @@ The logic matches the structure of a **sliding window of three rows**, where all
 
 ---
 
-## Approach
+### Approach
 
 1. **Use a CTE (`cte_three_nums`) to select `num` along with the next two `num` values using `LEAD()` window functions.**  
    ✅ `LEAD()` allows peeking forward without joins, creating a 3-row window to test for repeated values.
@@ -46,14 +49,14 @@ The logic matches the structure of a **sliding window of three rows**, where all
 
 ---
 
-## Complexity
+### Complexity
 
 - **Time complexity**: `O(n)` — the query scans all rows once and uses window functions, which MySQL optimizes linearly.  
 - **Space complexity**: `O(n)` — the CTE holds a copy of the `Logs` table with two additional computed columns.
 
 ---
 
-## Code
+### Code
 ```sql
 With cte_three_nums as
   (
@@ -73,3 +76,88 @@ Where
   num = num2 and
   num = num3;
 ```
+
+## Approach #2: Use **self-joins** on the auto-incremented `id` column.
+
+### Intuition  
+The task involves finding values in the `Logs` table appearing **at least three times consecutively** by `id`.  
+The solution uses **self-joins** on the auto-incremented `id` column, taking full advantage of index-based comparisons for speed.
+
+---
+
+### Approach
+
+1. **Alias the `Logs` table three times** as `logs_1`, `logs_2`, and `logs_3`.  
+   ✅ Allow for referencing three consecutive rows simultaneously without windowing.
+
+2. **Join `logs_2` where its `id = logs_1.id + 1`, and `logs_3` where `id = logs_1.id + 2`.**  
+   ✅ Creates a 3-row sliding window using index-based lookups as opposed to full-table scans.
+
+3. **Filter for rows where `logs_1.num = logs_2.num = logs_3.num`.**  
+   ✅ Ensures all three values in the window equal each other — a valid match.
+
+4. **Select `Distinct num` as `ConsecutiveNums`.**  
+   ✅ Returns each matching number only once, even if the value appears in multiple 3-row groups.
+
+---
+
+### Complexity
+
+- **Time complexity**: `O(n)` — The self-joins operate over indexed `id` values with no sorting or buffering.  
+- **Space complexity**: `O(1)` — Joins operate on streams and don’t require window buffers or CTE materialization.
+
+---
+
+### Code
+```sql
+Select Distinct 
+  logs_1.num as ConsecutiveNums
+From 
+  Logs logs_1
+    Inner Join Logs logs_2 On 
+      logs_1.id + 1 = logs_2.id
+    Inner Join Logs logs_3 On
+      logs_1.id + 2 = logs_3.id
+Where
+  logs_1.num = logs_2.num and
+  logs_2.num = logs_3.num;
+```
+
+## Comparison: Pros and Cons
+
+### Method: **Window Function + CTE (LEAD + DENSE FILTERING)**
+
+#### Pros
+
+1. Clean logic using `LEAD()` to express consecutive sequences.  
+2. Very readable and intuitive — directly maps to the idea of sliding forward.  
+3. Easy to adapt for longer sequences (e.g., four or five in a row).  
+
+#### Cons
+
+1. May require full scan and buffering — `LEAD()` does not always use indices efficiently.
+2. CTE materialization introduces overhead in older MySQL setups.  
+3. Slightly higher memory footprint versus raw joins.  
+
+---
+
+### Method: **Triple Self-Join (logs.id + 1 and logs.id + 2)**
+
+#### Pros
+
+1. Extremely fast with indexed `id` — MySQL optimizes simple integer joins well.  
+2. No CTEs or window functions — pure join logic benefits older engines.  
+3. Minimal memory and CPU cost — leverages tight, nested loop-style plans.  
+
+#### Cons
+
+1. Slightly less intuitive at first glance.  
+2. Less flexible if the column used for order different than `id`.  
+3. Requires exact sequence gaps — not ideal when missing or sparse rows occur.  
+
+---
+
+## Recommendation
+
+- Use **Triple Self-Join** when a sequential and indexed `id` column occurs. The method represents the fastest and most scalable solution for large tables.
+- Use **Window Function + CTE** when working in platforms favoring readability, supporting advanced windowing well, or when adapting to variable-length sequence detection.
