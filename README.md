@@ -34,9 +34,9 @@ Each file includes:
 ## 📈 Why the Current Repo?
 
 The repostory serves as more than a place for code.  The repository provides a **learning log** and **reference guide** I use to:
-- (1) Improve query performance thinking.
-- (2) Sharpen interview readiness.
-- (3) Apply SQL patterns to real BI/analytics work.
+1. Improve query performance thinking.
+2. Sharpen interview readiness.
+3. Apply SQL patterns to real BI/analytics work.
 
 ---
 
