@@ -42,8 +42,8 @@ The repostory serves as more than a place for code.  The repository provides a *
 
 ## 🧩 Sample Problems
 
+- `175. Combine Two Tables`
 - `176. Second Highest Salary`
-- `178. Rank Scores`
 - `181. Employees Earning More Than Their Managers`
 - `182. Duplicate Emails`
 
