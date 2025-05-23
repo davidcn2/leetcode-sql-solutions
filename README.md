@@ -43,8 +43,8 @@ The repostory serves as more than a place for code.  The repository provides a *
 ## Sample Problems
 
 - [175. Combine Two Tables](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20175%3A%20Combine%20Two%20Tables)
-- `176. Second Highest Salary`
-- `177. Nth Highest Salary` > Includes two solutions, pros and cons, and final recommendations.
+- [176. Second Highest Salary](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20176.%20Second%20Highest%20Salary)
+- [177. Nth Highest Salary](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20177.%20Nth%20Highest%20Salary) > Includes two solutions, pros and cons, and final recommendations.
 - `178. Rank Scores`
 - `180. Consecutive Numbers` > Includes two solutions, pros and cons, and final recommendations.
 - `181. Employees Earning More Than Their Managers`
