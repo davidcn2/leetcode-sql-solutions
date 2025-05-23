@@ -17,11 +17,11 @@ Each row contains a salary value that may repeat across employees. The task invo
 4. **Use a function wrapper to allow passing the rank `N` as a parameter - indicating the Nth distinct highest salary.**  
    ✅ Enables dynamic reuse of the query structure without rewriting SQL for each value of `N`.
 
-## Complexity  
+### Complexity  
 - **Time complexity**: `O(n log n)` — due to sorting for rank assignment.  
 - **Space complexity**: `O(n)` — for storing ranked rows in the CTE.
 
-## Code  
+### Code  
 ```sql
 CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
 BEGIN
