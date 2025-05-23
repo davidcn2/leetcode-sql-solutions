@@ -2,10 +2,10 @@
 
 The repository contains my structured, well-documented solutions to **popular SQL problems on LeetCode**, with a focus on:
 
-- ✅ Clean, readable, and efficient SQL (MySQL-focused)
-- ✅ Interview-style approaches using JOIN, GROUP BY, RANK, ROW_NUMBER, CTE, WINDOW FUNCTIONS, ...
-- ✅ Real-world BI/Data Analytics reasoning behind query choices.
-- ✅ Performance-aware patterns and edge case handling.
+✅ Clean, readable, and efficient SQL (MySQL-focused)
+✅ Interview-style approaches using JOIN, GROUP BY, RANK, ROW_NUMBER, CTE, WINDOW FUNCTIONS, ...
+✅ Real-world BI/Data Analytics reasoning behind query choices.
+✅ Performance-aware patterns and edge case handling.
 
 ---
 
