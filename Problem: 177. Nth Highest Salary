@@ -1,0 +1,46 @@
+# Problem: 177. Nth Highest Salary
+
+## Intuition  
+Each row contains a salary value that may repeat across employees. The task involves identifying the **Nth distinct highest salary**, not just the Nth row when sorted. A solution must return `NULL` if fewer than `N` unique salaries exist.
+
+## Approach #1
+
+1. **Create a Common Table Expression (CTE) named `cte_ranker` which selects `salary` and applies `dense_rank()` over salaries in descending order.**  
+   ✅ `DENSE_RANK()` handles duplicates correctly by assigning the same rank to identical salary values. Using descending order ensures the highest salaries receive the lowest rank numbers (e.g., 1, 2, 3...).
+
+2. **Within the CTE, reference only the `salary` and the assigned rank.**  
+   ✅ The logic isolates the minimal required data for filtering, keeping performance efficient and logic focused.
+
+3. **Filter the CTE for `Ranker = N` using a `where` clause in the final query.**  
+   ✅ Targets exactly the salary at the requested rank. If no such rank exists (e.g., `N` exceeds the number of distinct salaries, too few salaries exist, ...), returns null.
+
+4. **Use a function wrapper to allow passing the rank `N` as a parameter - indicating the Nth distinct highest salary.**  
+   ✅ Enables dynamic reuse of the query structure without rewriting SQL for each value of `N`.
+
+## Complexity  
+- **Time complexity**: `O(n log n)` — due to sorting for rank assignment.  
+- **Space complexity**: `O(n)` — for storing ranked rows in the CTE.
+
+## Code  
+```sql
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  RETURN (
+    With cte_ranker as
+      (
+      Select -- Get the distinct ranking in descending order of each salary.
+        salary,
+        dense_rank() over (order by salary desc) as Ranker
+      From
+        Employee
+      )
+
+    Select -- Return the 
+      max(salary)
+    From
+      cte_ranker
+    Where
+      Ranker = 2
+  );
+END
+```
