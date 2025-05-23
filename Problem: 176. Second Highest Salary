@@ -1,0 +1,34 @@
+# Problem: 176. Second Highest Salary...
+
+## Intuition
+Use `DENSE_RANK()` to assign ranks to distinct salary values. Then, filter for `rank = 2`.
+
+## Approach
+1. Use a Common Table Expression (CTE) to assign ranks using `DENSE_RANK() OVER (ORDER BY salary DESC)`.  
+   ✅ `ROW_NUMBER()` is not appropriate here because it assigns unique ranks even for duplicates, which could incorrectly pick one of the tied top salaries as the second highest.
+
+2. Filter for `row_nbr = 2` to get the second highest distinct salary.  
+   ✅ If no such salary exists, the result set will be empty.
+
+3. Use `MAX()` to return the salary, or `NULL` if the second-highest does not exist.
+
+## Complexity
+- **Time complexity**: `O(n log n)` — due to sorting in the window function.
+- **Space complexity**: `O(n)` — from the CTE and ranking buffer.
+
+## Code
+```sql
+WITH cte_x AS (
+  SELECT
+    salary,
+    DENSE_RANK() OVER (ORDER BY salary DESC) AS row_nbr
+  FROM
+    Employee
+)
+SELECT
+  MAX(salary) AS SecondHighestSalary
+FROM
+  cte_x
+WHERE
+  row_nbr = 2;
+```
