@@ -1,0 +1,50 @@
+# Problem: 182. Duplicate Emails
+
+## Description
+Table: Person
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| email       | varchar |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains an email. The emails will not contain uppercase letters.
+
+Write a solution to report all the duplicate emails. Note that it's guaranteed that the email field is not NULL.
+
+Return the result table in any order.
+
+## Intuition
+The problem involves identifying all duplicate `email` values from a table where each row contains one email. A guarantee exists for every email entry to avoid a null value. In addition, emails always use lowercase.
+
+## Approach
+
+1. **Group all rows by the `email` field.**  
+   ✅ Ensures rows sharing the same email evaluate together, allowing the identification of duplicates through aggregation.
+
+2. **Apply `COUNT(*)` to each group.**  
+   ✅ Provides the total number of rows per email, which enables direct comparison against a duplication threshold.
+
+3. **Filter the grouped results using `HAVING COUNT(*) > 1`.**  
+   ✅ Retains only the emails occurring more than once, which satisfies the definition of a duplicate in the problem.
+
+4. **Select the `email` field for output.**  
+   ✅ Matches the expected result format, which includes only the duplicated email values in any order.
+
+## Complexity
+- **Time complexity**: `O(n)` — one pass to group all rows and count occurrences.
+- **Space complexity**: `O(m)` — where `m` equals the number of unique emails, stored temporarily during grouping.
+
+## Code
+```sql
+Select
+  email
+From
+  Person
+Group By
+  email
+Having
+  count(*) > 1;
+```
