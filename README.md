@@ -45,11 +45,11 @@ The repostory serves as more than a place for code.  The repository provides a *
 - [175. Combine Two Tables](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20175%3A%20Combine%20Two%20Tables)
 - [176. Second Highest Salary](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20176.%20Second%20Highest%20Salary)
 - [177. Nth Highest Salary](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20177.%20Nth%20Highest%20Salary) > Includes two solutions, pros and cons, and final recommendations.
-- `178. Rank Scores`
-- `180. Consecutive Numbers` > Includes two solutions, pros and cons, and final recommendations.
-- `181. Employees Earning More Than Their Managers`
-- `182. Duplicate Emails`
-- `183. Customers Who Never Order`
+- [178. Rank Scores](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20178.%20Rank%20Scores)
+- [180. Consecutive Numbers](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20180.%20Consecutive%20Numbers) > Includes two solutions, pros and cons, and final recommendations.
+- [181. Employees Earning More Than Their Managers](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20181.%20Employees%20Earning%20More%20Than%20Their%20Managers)
+- [182. Duplicate Emails](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20182.%20Duplicate%20Emails)
+- [183. Customers Who Never Order](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20183.%20Customers%20Who%20Never%20Order)
 
 More coming as I complete them.
 
