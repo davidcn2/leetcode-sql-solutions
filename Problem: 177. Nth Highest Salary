@@ -3,7 +3,7 @@
 ## Intuition  
 Each row contains a salary value that may repeat across employees. The task involves identifying the **Nth distinct highest salary**, not just the Nth row when sorted. A solution must return `NULL` if fewer than `N` unique salaries exist.
 
-## Approach #1
+## Approach #1: Use a combination of a CTE and windowed function.
 
 1. **Create a Common Table Expression (CTE) named `cte_ranker` which selects `salary` and applies `dense_rank()` over salaries in descending order.**  
    ✅ `DENSE_RANK()` handles duplicates correctly by assigning the same rank to identical salary values. Using descending order ensures the highest salaries receive the lowest rank numbers (e.g., 1, 2, 3...).
@@ -44,3 +44,73 @@ BEGIN
   );
 END
 ```
+
+## Approach #2: Use LIMIT and OFFSET with Precomputed Rank.
+
+1. **Precompute `N - 1` using a declared variable.**  
+   ✅ Prevents syntax errors from inline math inside `OFFSET`, which MySQL disallows in functions.
+
+2. **Use `DISTINCT`, `ORDER BY`, `LIMIT 1 OFFSET pos`.**  
+   ✅ Efficiently retrieves the Nth unique highest salary by leveraging sort-and-skip behavior.
+
+### Complexity  
+- **Time complexity**: `O(n log n)` — caused by sorting the salary column in descending order. The LIMIT and OFFSET allow early termination, improving practical speed when an index is present.  
+- **Space complexity**: `O(1)` — no additional structures beyond the sorted result set; the query engine returns a single value directly.
+
+### Code  
+```sql
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+  -- Declare a local variable to hold the 0-based offset position.
+  Declare pos INT;
+
+  -- Compute the offset by subtracting 1 from N (since OFFSET uses base 0, while N uses base 1).
+  Set pos = N - 1;
+
+  -- Return the Nth highest distinct salary.
+  RETURN (
+    Select Distinct -- Select unique salary values only
+      salary
+    From
+      Employee
+    Order By
+      salary Desc -- Highest salary first
+    Limit 1 Offset pos -- Skip (N - 1) entries, return the next one.
+  );
+END;
+```
+
+## 🔍 Comparison: Pros and Cons
+
+### Method: **DENSE_RANK + CTE**
+
+#### Pros
+
+1. Handles duplicates cleanly and clearly.  
+2. Easy to extend to `ROW_NUMBER`, ...  
+3. Reads well for complex ranking problems.  
+
+#### Cons
+
+1. Requires full table scan and sort.  
+2. Slower on large datasets.  
+3. CTE materialization may affect older MySQL.  
+
+### Method: **LIMIT + OFFSET**
+
+#### Pros
+
+1. Fast and index-friendly.  
+2. Leverages native sort + early exit.  
+3. Minimal memory use.  
+
+### Cons
+
+1. Less readable for new SQL learners.  
+2. Needs workaround for `N - 1` in `OFFSET`.  
+3. Requires `DISTINCT` to enforce uniqueness.  
+
+## Recommendation
+
+- Use the **CTE + `DENSE_RANK()`** method when clarity or flexible ranking logic (like ties or multi-rank joins) matters.
+- Use the **`LIMIT OFFSET`** method when raw speed or indexed performance becomes critical, especially in interview or production environments.
