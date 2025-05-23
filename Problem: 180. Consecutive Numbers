@@ -1,0 +1,75 @@
+# Problem: 180. Consecutive Numbers
+
+## Description
+
+Table: Logs
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| num         | varchar |
++-------------+---------+
+In SQL, id is the primary key for this table.
+id is an autoincrement column starting from 1.
+ 
+
+Find all numbers that appear at least three times consecutively.
+
+Return the result table in any order.
+
+## Intuition  
+The task involes identifying any number appearing **at least three times in a row** (consecutively by `id`) in the `Logs` table. Because `id` represents an auto-incrementing primary key, the column can be used to order rows deterministically.
+
+The pattern involves checking:
+- A value `num` at row `i`
+- The same value at `i+1`
+- And again at `i+2`
+
+The logic matches the structure of a **sliding window of three rows**, where all three values must equal each other.
+
+---
+
+## Approach
+
+1. **Use a CTE (`cte_three_nums`) to select `num` along with the next two `num` values using `LEAD()` window functions.**  
+   ✅ `LEAD()` allows peeking forward without joins, creating a 3-row window to test for repeated values.
+
+2. **Assign the results of `LEAD(num, 1)` and `LEAD(num, 2)` to `num2` and `num3`.**  
+   ✅ Creates two additional columns to compare against the current `num`.
+
+3. **Filter where `num = num2 AND num = num3`.**  
+   ✅ Ensures the current value and the next two values are all identical.
+
+4. **Select `DISTINCT num` as `ConsecutiveNums`.**  
+   ✅ Ensures the output only contains each repeated value once, even if the pattern appears more than once.
+
+---
+
+## Complexity
+
+- **Time complexity**: `O(n)` — the query scans all rows once and uses window functions, which MySQL optimizes linearly.  
+- **Space complexity**: `O(n)` — the CTE holds a copy of the `Logs` table with two additional computed columns.
+
+---
+
+## Code
+```sql
+With cte_three_nums as
+  (
+  Select
+    num,
+    lead(num, 1) over (order by id) as num2,
+    lead(num, 2) over (order by id) as num3
+  From
+    Logs
+  )
+
+Select Distinct
+  num as ConsecutiveNums
+From
+  cte_three_nums
+Where
+  num = num2 and
+  num = num3;
+```
