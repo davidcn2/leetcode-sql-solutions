@@ -9,7 +9,7 @@ The repository contains my structured, well-documented solutions to **popular SQ
 
 ---
 
-## 📚 Problem Coverage
+## Problem Coverage
 
 Each file includes:
 - **Problem description**
@@ -20,7 +20,7 @@ Each file includes:
 
 ---
 
-## 🛠️ Topics Covered
+## Topics Covered
 
 - JOIN (inner, outer, self-joins, ...)
 - GROUP BY and aggregates
@@ -31,7 +31,7 @@ Each file includes:
 
 ---
 
-## 📈 Why the Current Repo?
+## Why the Current Repo?
 
 The repostory serves as more than a place for code.  The repository provides a **learning log** and **reference guide** I use to:
 1. Improve query performance thinking.
@@ -40,7 +40,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 
 ---
 
-## 🧩 Sample Problems
+## Sample Problems
 
 - `175. Combine Two Tables`
 - `176. Second Highest Salary`
@@ -52,6 +52,6 @@ More coming as I complete them.
 
 ---
 
-## 🧠 Want to Collaborate?
+## Want to Collaborate?
 
 Feel free to fork, star, or suggest improvements — or reach out if you're building something similar and want to collaborate.
