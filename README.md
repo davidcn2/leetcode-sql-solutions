@@ -42,7 +42,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 
 ## Sample Problems
 
-- [`175. Combine Two Tables`]([https://github.com/yourusername/your-repo/blob/main/sql/175-combine-two-tables.sql](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20175%3A%20Combine%20Two%20Tables))
+- [175. Combine Two Tables]([https://github.com/yourusername/your-repo/blob/main/sql/175-combine-two-tables.sql](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20175%3A%20Combine%20Two%20Tables))
 - `176. Second Highest Salary`
 - `177. Nth Highest Salary` > Includes two solutions, pros and cons, and final recommendations.
 - `178. Rank Scores`
