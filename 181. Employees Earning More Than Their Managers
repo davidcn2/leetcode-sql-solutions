@@ -1,0 +1,50 @@
+# Problem: 181. Employees Earning More Than Their Managers
+
+## Problem
+Table: Employee
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| name        | varchar |
+| salary      | int     |
+| managerId   | int     |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table indicates the ID of an employee, their name, salary, and the ID of their manager.
+
+Write a solution to find the employees who earn more than their managers.
+
+## Intuition
+The table uses `managerId` to reference the employee manager from within the same dataset. The solution requires comparing salaries between rows in the same table (e.g., a self-join).
+
+## Approach
+
+1. **Alias the `Employee` table twice** — once as `emp` to represent the employee, and once as `mgr` to represent the manager.  
+   ✅ Enables a self-join, allowing access to salary of both the employee and the manager in a single row context.
+
+2. **Join the two aliases using `emp.managerId = mgr.id`**.  
+   ✅ Matches each employee to their manager using the foreign key–primary key relationship defined by `managerId` → `id`.
+
+3. **Apply a filter using `emp.salary > mgr.salary`**.  
+   ✅ Excludes employee–manager pairs where the employee earns less than or the same as the manager, leaving only valid results.
+
+4. **Select `emp.name` and rename the field as `Employee`**.  
+   ✅ Aligns the result with the required output schema, ensuring LeetCode’s test validator accepts the solution.
+
+## Complexity
+- **Time complexity**: `O(n log n)` — from join processing and sorting on indexed fields (if available).
+- **Space complexity**: `O(1)` — no additional memory outside the join structure.
+
+## Code
+```sql
+Select
+  emp.name as Employee
+From
+  Employee emp
+    Inner Join Employee mgr On
+      emp.managerId = mgr.id
+Where
+  emp.salary > mgr.salary;
+```
