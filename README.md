@@ -46,6 +46,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 - `176. Second Highest Salary`
 - `177. Nth Highest Salary` > Includes two solutions, pros and cons, and a final recommendation.
 - `178. Rank Scores`
+- `180. Consecutive Numbers`
 - `181. Employees Earning More Than Their Managers`
 - `182. Duplicate Emails`
 
