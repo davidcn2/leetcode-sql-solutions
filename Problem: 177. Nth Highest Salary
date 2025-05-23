@@ -80,7 +80,7 @@ BEGIN
 END;
 ```
 
-## 🔍 Comparison: Pros and Cons
+## Comparison: Pros and Cons
 
 ### Method: **DENSE_RANK + CTE**
 
