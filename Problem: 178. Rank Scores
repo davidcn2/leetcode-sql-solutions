@@ -1,0 +1,74 @@
+# Problem: 178. Rank Scores
+
+## Description
+
+Table: Scores
+
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| id          | int     |
+| score       | decimal |
++-------------+---------+
+id is the primary key (column with unique values) for this table.
+Each row of this table contains the score of a game. Score is a floating point value with two decimal places.
+ 
+
+Write a solution to find the rank of the scores. The ranking should be calculated according to the following rules:
+
+The scores should be ranked from the highest to the lowest.
+If there is a tie between two scores, both should have the same ranking.
+After a tie, the next ranking number should be the next consecutive integer value. In other words, there should be no holes between ranks.
+Return the result table ordered by score in descending order.
+
+## Intuition  
+Each row in the table contains a score from a game. The goal involves assigning a rank to each score such that:
+- Rank the scores from highest to lowest.
+- Equal scores share the same rank.
+- Ranks increment without gaps after ties.
+
+The behavior matches the properties of the `DENSE_RANK()` function.
+
+---
+
+## Approach
+
+1. **Use a CTE (`cte_scores`) to generate scores alongside their rank using `DENSE_RANK()` ordered by `score DESC`.**  
+   ✅ Assigns ranks from highest to lowest while allowing tied scores to share the same rank.
+
+2. **Alias the rank as `` `rank` `` using backticks to avoid conflicts with the reserved keyword.**  
+   ✅ Ensures compatibility with MySQL syntax and prevents parsing errors in stricter environments.
+
+3. **Select `score` and `` `rank` `` from the CTE.**  
+   ✅ Retrieves the required output fields, now ranked as specified.
+
+4. **Order the final result by `score` in descending order.**  
+   ✅ Matches the expected output format from the problem description.
+
+---
+
+## Complexity
+
+- **Time complexity**: `O(n log n)` — due to sorting for the window function.  
+- **Space complexity**: `O(n)` — for the CTE that stores intermediate results with rank.
+
+---
+
+## Code
+```sql
+With cte_scores as
+  (
+  Select
+    Score,
+    dense_rank() over (order by score desc) as `rank`
+  From
+    Scores
+  )
+
+Select
+  score,
+  `rank`
+From
+  cte_scores
+Order By `rank`;
+```
