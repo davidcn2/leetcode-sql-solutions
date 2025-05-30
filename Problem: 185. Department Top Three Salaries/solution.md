@@ -1,133 +1,64 @@
-# Problem: 185. Department Top Three Salaries
+# Problem: 175. Combine Two Tables
 
 ## Description
 
-Table: Employee
-
-+--------------+---------+
-| Column Name  | Type    |
-+--------------+---------+
-| id           | int     |
-| name         | varchar |
-| salary       | int     |
-| departmentId | int     |
-+--------------+---------+
-id is the primary key (column with unique values) for this table.
-departmentId is a foreign key (reference column) of the ID from the Department table.
-Each row of this table indicates the ID, name, and salary of an employee. It also contains the ID of their department.
- 
-
-Table: Department
+Table: Person
 
 +-------------+---------+
 | Column Name | Type    |
 +-------------+---------+
-| id          | int     |
-| name        | varchar |
+| personId    | int     |
+| lastName    | varchar |
+| firstName   | varchar |
 +-------------+---------+
-id is the primary key (column with unique values) for this table.
-Each row of this table indicates the ID of a department and its name.
+personId is the primary key (column with unique values) for this table.
+This table contains information about the ID of some persons and their first and last names.
  
 
-A company's executives are interested in seeing who earns the most money in each of the company's departments. A high earner in a department is an employee who has a salary in the top three unique salaries for that department.
+Table: Address
 
-Write a solution to find the employees who are high earners in each of the departments.
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| addressId   | int     |
+| personId    | int     |
+| city        | varchar |
+| state       | varchar |
++-------------+---------+
+addressId is the primary key (column with unique values) for this table.
+Each row of this table contains information about the city and state of one person with ID = PersonId.
+
+Write a solution to report the first name, last name, city, and state of each person in the Person table. If the address of a personId is not present in the Address table, report null instead.
 
 Return the result table in any order.
 
-The result format is in the following example.
-
- 
-
-Example 1:
-
-Input: 
-Employee table:
-+----+-------+--------+--------------+
-| id | name  | salary | departmentId |
-+----+-------+--------+--------------+
-| 1  | Joe   | 85000  | 1            |
-| 2  | Henry | 80000  | 2            |
-| 3  | Sam   | 60000  | 2            |
-| 4  | Max   | 90000  | 1            |
-| 5  | Janet | 69000  | 1            |
-| 6  | Randy | 85000  | 1            |
-| 7  | Will  | 70000  | 1            |
-+----+-------+--------+--------------+
-Department table:
-+----+-------+
-| id | name  |
-+----+-------+
-| 1  | IT    |
-| 2  | Sales |
-+----+-------+
-Output: 
-+------------+----------+--------+
-| Department | Employee | Salary |
-+------------+----------+--------+
-| IT         | Max      | 90000  |
-| IT         | Joe      | 85000  |
-| IT         | Randy    | 85000  |
-| IT         | Will     | 70000  |
-| Sales      | Henry    | 80000  |
-| Sales      | Sam      | 60000  |
-+------------+----------+--------+
-Explanation: 
-In the IT department:
-- Max earns the highest unique salary
-- Both Randy and Joe earn the second-highest unique salary
-- Will earns the third-highest unique salary
-
-In the Sales department:
-- Henry earns the highest salary
-- Sam earns the second-highest salary
-- There is no third-highest salary as there are only two employees
- 
-
-Constraints:
-
-There are no employees with the exact same name, salary and department.  
-
 ## Intuition  
-Use a window function to rank salaries within each department. DENSE_RANK() captures ties while preserving order. Filtering by rank selects the top three distinct salaries per department.  
+The task requires combining two tables using a shared identifier. Each person may or may not have a corresponding address. The solution must return all people, including individuals without address records.
 
-## Approach
+## Approach  
 
-1. **Join the Employee and Department tables using departmentId = id**.  
-  ✅ Combines salary and department name in one row.
+1. **Alias the `Person` table as `p` and the `Address` table as `a`.**  
+   ✅ Clarifies which table each column originates from and simplifies the join and select logic.
 
-2. **Use a Common Table Expression (CTE) to apply DENSE_RANK() over salaries partitioned by department**.  
-  ✅ Assigns ranks without skipping values for ties.  
+2. **Use a `LEFT JOIN` from `Person` to `Address` on `p.personId = a.personId`.**  
+   ✅ Ensures every row from the `Person` table appears in the result. When no matching address exists, the address fields remain null. The logic satisfies the requirement to include people regardless of address availability.
 
-3. **Assign each employee a SalaryRank within their department**.  
-  ✅ Identifies the top three unique salary levels.  
+3. **Select `p.firstName`, `p.lastName`, `a.city`, and `a.state`.**  
+   ✅ Matches the expected output format by combining personal and address details. The address fields default to `NULL` when no match exists, which aligns with the requirements of the problem.
 
-4. **Filter the CTE for rows where SalaryRank <= 3**.  
-  ✅ Retains only employees in the top three salary tiers per department.  
+## Complexity  
+- **Time complexity**: `O(n)` — one pass through the joined result set.  
+- **Space complexity**: `O(1)` — output memory depends only on the result set; no additional structures required.
 
-## Complexity
-- **Time complexity**: `O(n log n)` — due to sorting within each department for ranking.
-- **Space complexity**: `O(n)` — space used by the CTE and ranking output.
-
-## Code
-With cte_rank_earners as
-  (
-  select
-    dept.name as Department,
-    emp.name as Employee,
-    emp.salary as Salary,
-    dense_rank() over (partition by emp.departmentId order by emp.salary desc) as SalaryRank
-  From
-    employee emp
-      Inner Join department dept on
-        emp.departmentId = dept.id
-  )
+## Code  
+```sql
 Select
-  Department,
-  Employee,
-  Salary
+  p.firstName,
+  p.lastName,
+  a.city,
+  a.state
 From
-  cte_rank_earners
-where
-  SalaryRank <= 3;
+  Person p
+    Left Join Address a On
+      p.personId = a.personId;
 ```
