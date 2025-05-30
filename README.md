@@ -50,6 +50,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 - [181. Employees Earning More Than Their Managers](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20181.%20Employees%20Earning%20More%20Than%20Their%20Managers)
 - [182. Duplicate Emails](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20182.%20Duplicate%20Emails)
 - [183. Customers Who Never Order](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20183.%20Customers%20Who%20Never%20Order) > Includes two solutions, pros and cons, and final recommendations.
+- [185. Department Top Three Salaries](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20185.%20Department%20Top%20Three%20Salaries)
 
 More coming as I complete them.
 
