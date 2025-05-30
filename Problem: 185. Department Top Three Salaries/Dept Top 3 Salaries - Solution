@@ -131,3 +131,14 @@ From
 where
   SalaryRank <= 3;
 ```
+
+## Dataset and View Setup
+
+The full schema and sample data used to test the solution exist in:
+
+[`department_top_three_salaries.sql`](./department_top_three_salaries.sql)
+
+The file contains:
+- `CREATE TABLE` statements for `employee` and `department` (e.g., the source tables).
+- Sample `INSERT` data matching the data used in the problem example.
+- A `CREATE VIEW` statement named `vw_department_top_three_salaries`, which reflects the solution query logic.
