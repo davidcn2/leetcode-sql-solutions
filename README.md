@@ -56,7 +56,7 @@ The repostory serves as more than a place for code.  The repository provides a *
 
 ## SQL
 
-- [`185. Department Top Three Salaries`](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20185.%20Department%20Top%20Three%20Salaries/Department%20Top%203%20Salaries.sql)
+- [185. Department Top Three Salaries](https://github.com/davidcn2/leetcode-sql-solutions/blob/main/Problem%3A%20185.%20Department%20Top%20Three%20Salaries/Department%20Top%203%20Salaries.sql)
 
 ---
 
