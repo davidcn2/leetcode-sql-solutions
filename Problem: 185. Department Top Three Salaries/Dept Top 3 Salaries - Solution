@@ -135,8 +135,7 @@ where
 ## Dataset and View Setup
 
 The full schema and sample data used to test the solution exist in:
-
-[`department_top_three_salaries.sql`](./department_top_three_salaries.sql)
+  department_top_three_salaries.sql
 
 The file contains:
 - `CREATE TABLE` statements for `employee` and `department` (e.g., the source tables).
